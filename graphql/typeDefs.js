@@ -11,6 +11,7 @@ type Post{
     likes: [Like]!
     likesCount: Int!
     commentsCount: Int!
+    userAvatar: String!
 }
 
 type Comment{
@@ -32,6 +33,7 @@ type User{
     email: String!
     token: String!
     createdAt: String!
+    avatar: String!
 }
 
 input RegisterInput{

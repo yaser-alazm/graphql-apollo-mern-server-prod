@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {UserInputError} = require('apollo-server')
+const crypto = require('crypto')
+const request = require('request')
 
 const User = require('../../models/User')
 const {JWT_SECRET_KEY} = require('../../config')
@@ -10,7 +12,8 @@ generateToken = (user) => {
     return jwt.sign({
         id: user.id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        avatar: user.avatar
     }, JWT_SECRET_KEY, {expiresIn: '1h'})
 }
 
@@ -35,12 +38,26 @@ module.exports = {
             // Hash password and create an auth token
             password = await bcrypt.hash(password, 12);
 
+            // get the user avatar image
+            const hashedEmail = await crypto.createHash('md5').update(email).digest("hex");
+
+            const avatar = await `https://www.gravatar.com/avatar/${hashedEmail}.jpg`
+
+            // await request(`https://www.gravatar.com/avatar/${hashedEmail}.jpg`,(err,response,body) => {
+            //     if (!err){
+            //         console.log(`https://www.gravatar.com/avatar/${hashedEmail}.jpg`);
+            //     }else{
+            //         console.log("Error: "+err);
+            //     }
+            // })
+
             // create new user
             const newUser = new User({
                 username,
                 password,
                 email,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                avatar
             })
 
             const res = await newUser.save()
@@ -51,13 +68,14 @@ module.exports = {
 
             // debug
             //console.log('res ='+ res, 'token ='+ token)
-
+            // console.log(res)
             return {
                 id: res._id,
                 username: res.username,
                 email: res.email,
                 createdAt: res.createdAt,
-                token
+                avatar: res.avatar,
+                token,
             }
         },
         async login(_, {username, password}){
@@ -90,6 +108,7 @@ module.exports = {
                 username: user.username,
                 email: user.email,
                 createdAt: user.createdAt,
+                avatar: user.avatar,
                 token
             }
 

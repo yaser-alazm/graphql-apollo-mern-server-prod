@@ -1,4 +1,5 @@
 const {AuthenticationError, UserInputError} = require('apollo-server')
+const crypto = require('crypto')
 
 const Post = require('../../models/Post')
 const checkAuthUser = require('../../utils/check-auth')
@@ -44,15 +45,22 @@ module.exports = {
                 })
             }
 
+            // get the user avatar image
+            // const hashedEmail = await crypto.createHash('md5').update(user.email).digest("hex");
+
+            // const avatar = await `https://www.gravatar.com/avatar/${hashedEmail}.jpg`
+
             const newPost = await new Post({
                 body,
                 user:user.id,
                 username: user.username,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                userAvatar: user.avatar
             });
 
             const post = await newPost.save()
 
+            // console.log(post)
             return post
 
         },
