@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const request = require('request')
 
 const User = require('../../models/User')
-const {JWT_SECRET_KEY} = require('../../config')
+// const {JWT_SECRET_KEY} = require('../../config')
 const {validateRegisterInput, validateLoginInput} = require('../../utils/validation')
 
 generateToken = (user) => {
@@ -14,7 +14,7 @@ generateToken = (user) => {
         username: user.username,
         email: user.email,
         avatar: user.avatar
-    }, JWT_SECRET_KEY, {expiresIn: '1h'})
+    }, process.env.JWT_SECRET_KEY, {expiresIn: '1h'})
 }
 
 module.exports = {
