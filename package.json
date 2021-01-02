@@ -19,7 +19,8 @@
     "graphql-tag": "^2.11.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "request": "^2.88.2"
   },
   "proxy": "https://graphql-apollo-mern-network.herokuapp.com/"
 }
