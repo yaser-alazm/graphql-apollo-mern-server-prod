@@ -6,7 +6,7 @@ const checkAuth = require('../../utils/check-auth')
 module.exports = {
     Mutation: {
         createComment: async (_, {postId, body}, context) => {
-            const {username} = checkAuth(context)
+            const {username, avatar} = checkAuth(context)
 
             const post = await Post.findById(postId)
 
@@ -23,6 +23,7 @@ module.exports = {
             if(post){
                 post.comments.unshift({
                     username,
+                    userAvatar: avatar,
                     body,
                     createdAt: new Date().toISOString()
                 })

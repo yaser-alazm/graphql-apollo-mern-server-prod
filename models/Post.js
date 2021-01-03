@@ -8,6 +8,7 @@ const postSchema = new Schema({
     comments: [
         {
             username: String,
+            userAvatar: String,
             body: String,
             createdAt: String
         }
